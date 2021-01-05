@@ -1,0 +1,21 @@
+// TypeScript에게 어떻게 JavaScript로 변환하는지 알려주면서
+// 몇몇 옵션을 줌
+
+{
+
+    "compilerOptions": {
+        // node.js를 평범하게 사용하고
+        // 다양한 걸 import하거나 export할 수 있게 만듦
+        "module": "commonjs",
+    
+        // 어떤 버전의 JavaScript로 컴파일 되고 싶은지
+        "target": "ES2020",
+
+        // sourcemap처리 하고싶은지 알려줌
+        "sourceMap": true
+    },
+    // 어떤 파일들이 컴파일 과정에 포함되는지 TypeScript에 알려줌
+    // 컴파일 과정에서 포함할 파일의 배열을 적어줌
+    "include": ["index.ts"],
+    "exclude": ["node_modules"]
+}
