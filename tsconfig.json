@@ -12,10 +12,11 @@
         "target": "ES2020",
 
         // sourcemap처리 하고싶은지 알려줌
-        "sourceMap": true
+        "sourceMap": true,
+        "outDir" : "dist",
     },
     // 어떤 파일들이 컴파일 과정에 포함되는지 TypeScript에 알려줌
     // 컴파일 과정에서 포함할 파일의 배열을 적어줌
-    "include": ["index.ts"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules"]
 }
