@@ -27,9 +27,9 @@ class Block {
         }
 }
 
-const genestisBlock: Block = new Block(0, "2020202020", "", "Hello", 123456);
+const genesisBlock: Block = new Block(0, "2020202020", "", "Hello", 123456);
 
-let blockChain: Block[] = [genestisBlock];
+let blockChain: Block[] = [genesisBlock];
 
 console.log(blockChain);
 
