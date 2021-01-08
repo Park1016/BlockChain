@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const CryptoJS = require("crypto-js");
+// static, 나머지 것들, constructor 순서의 구조가 좋음
 class Block {
     constructor(index, hash, previousHash, data, timestamp) {
         this.index = index;
@@ -11,6 +12,13 @@ class Block {
     }
 }
 Block.calculateBlockHash = (index, previousHash, timestamp, data) => CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
+// 들어온 Block의 구조가 유효한지 아닌지 판단
+// 구조 검증
+Block.validateStructure = (aBlock) => typeof aBlock.index === "number" &&
+    typeof aBlock.hash === "string" &&
+    typeof aBlock.previousHash === "string" &&
+    typeof aBlock.timestamp === "number" &&
+    typeof aBlock.data === "string";
 const genesisBlock = new Block(0, "2020202020", "", "Hello", 123456);
 let blockChain = [genesisBlock];
 console.log(blockChain);
@@ -30,7 +38,44 @@ const createNewBlock = (data) => {
     const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
     return newBlock;
 };
-console.log(createNewBlock("Hello"), createNewBlock("Bye Bye"));
+// Hash검증
+const getHashforBlock = (aBlock) => Block.calculateBlockHash(aBlock.index, aBlock.previousHash, aBlock.timestamp, aBlock.data);
+// 제공되고있는 Block이 유효한지 아닌지 검사
+// 이전블록, 새로운블록 검증
+const isBlockValid = (candidateBlock, previousBlock) => {
+    // Block의 validateStructure가 유효하지 않으면 false 리턴
+    // candidateBlock, previousBlock을 받고 유효하지 않으면 false 리턴
+    if (!Block.validateStructure(candidateBlock)) {
+        return false;
+        // previousBlock의 인덱스+1 과 candidateBlock의 인덱스가 다르면 false리턴
+    }
+    else if (previousBlock.index + 1 !== candidateBlock.index) {
+        return false;
+        // previousBlock의 hash와 candidateBlock의 hash가 다르면 false리턴
+    }
+    else if (previousBlock.hash !== candidateBlock.previousHash) {
+        return false;
+        // Block의 hash가 유효한지 검사
+        // 따로 hash를 계산해서, 들어온 Block의 hash가 실제로 있는지 체크
+        // Block의 Hash를 얻었을 때(Block은 candidateBlock)
+        // 우리가 얻은 Hash가 condidatBlock의 Hash와 같지 않으면 false리턴
+    }
+    else if (getHashforBlock(candidateBlock) !== candidateBlock.hash) {
+        return false;
+    }
+    else {
+        return true;
+    }
+};
+// BlockChain에 Block 추가
+// 이 함수는 아무것도 return하지 않음
+const addBlock = (candidateBlock) => {
+    // isBlockValid함수가 실행돼고 true리턴하면 
+    if (isBlockValid(candidateBlock, getLatestBlock())) {
+        // candidateBlock 푸쉬함
+        blockChain.push(candidateBlock);
+    }
+};
 // 새로운 블록 만들기 위해선 hash 필요함
 // hash: 모든 속성을 길고 수학적으로 하나의 문자열로 결합한 것
 // cryptoJS 설치 --> yarn add crypto-js
