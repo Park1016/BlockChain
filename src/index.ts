@@ -69,6 +69,8 @@ const createNewBlock = (data:string) : Block => {
         data, 
         newTimestamp
     );
+    // 새로운 Block만들 때 그걸 BlockChain에 추가
+    addBlock(newBlock);
     return newBlock;
 };
 
@@ -108,6 +110,7 @@ const isBlockValid = (
 };
 
 // BlockChain에 Block 추가
+// addBlock을 createNewBlock함수에 연결함
 // 이 함수는 아무것도 return하지 않음
 const addBlock = (candidateBlock: Block):void => {
     // isBlockValid함수가 실행돼고 true리턴하면 
@@ -117,7 +120,12 @@ const addBlock = (candidateBlock: Block):void => {
     }
 };
 
+// Test
+createNewBlock("secondBlock");
+createNewBlock("thirdBlock");
+createNewBlock("fourthBlock");
 
+console.log(blockChain);
 
 export {};
 

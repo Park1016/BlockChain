@@ -36,6 +36,8 @@ const createNewBlock = (data) => {
     const newTimestamp = getNewTimeStamp();
     const newHash = Block.calculateBlockHash(newIndex, previousBlock.hash, newTimestamp, data);
     const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
+    // 새로운 Block만들 때 그걸 BlockChain에 추가
+    addBlock(newBlock);
     return newBlock;
 };
 // Hash검증
@@ -68,6 +70,7 @@ const isBlockValid = (candidateBlock, previousBlock) => {
     }
 };
 // BlockChain에 Block 추가
+// addBlock을 createNewBlock함수에 연결함
 // 이 함수는 아무것도 return하지 않음
 const addBlock = (candidateBlock) => {
     // isBlockValid함수가 실행돼고 true리턴하면 
@@ -76,6 +79,11 @@ const addBlock = (candidateBlock) => {
         blockChain.push(candidateBlock);
     }
 };
+// Test
+createNewBlock("secondBlock");
+createNewBlock("thirdBlock");
+createNewBlock("fourthBlock");
+console.log(blockChain);
 // 새로운 블록 만들기 위해선 hash 필요함
 // hash: 모든 속성을 길고 수학적으로 하나의 문자열로 결합한 것
 // cryptoJS 설치 --> yarn add crypto-js
